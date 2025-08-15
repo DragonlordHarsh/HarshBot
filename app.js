@@ -1,0 +1,6 @@
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+const DATA={owner:{name:"Harsh Dubey",roll:"055086"},sections:["AIB-1G","GAIBA-G","ABM-1G","STCI-2G","SDRM-2G"],faculty:{"AIB-1G":"Prof. Vaibhav Jain (VF)","GAIBA-G":"Prof. Anuj Saini (VF)","ABM-1G":"Prof. Rahul Gupta (VF)","STCI-2G":"Prof. Anil Kumar Singh","SDRM-2G":"Prof. Pranesh Nagarajan"},events:[]};
+const el=s=>document.querySelector(s),messages=el('#messages'),text=el('#text');
+function say(c,w='me'){const b=document.createElement('div');b.className='bubble '+(w==='you'?'you':'me');b.textContent=c;messages.appendChild(b);messages.scrollTop=messages.scrollHeight;}
+document.getElementById('composer').addEventListener('submit',e=>{e.preventDefault();const q=text.value.trim();if(!q)return;say(q,'you');text.value='';if(/^(ok|okay|fine|sure|alright)$/i.test(q)){say("Thanks, let me know if you need any more help, Master Harsh.");}else if(/faculty/i.test(q)){say(Object.entries(DATA.faculty).map(([k,v])=>`${k}: ${v}`).join('\n'));}else{say("I can tell you next class, faculty, or timings, Master Harsh.");}});
+document.getElementById('themeBtn').addEventListener('click',()=>{document.body.classList.toggle('bat');document.body.classList.toggle('spidey');});

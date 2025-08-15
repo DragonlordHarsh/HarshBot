@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <base href="./">
+  <title>FORE-Bot</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="assets/icon-180.png">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="logo"></div>
+    <div class="titles">
+      <h1>FORE-Bot</h1>
+      <small>Howdy, Master Harsh! Your tiny timekeeper.</small>
+    </div>
+    <button id="themeBtn" class="icon">🎭</button>
+    <button id="notifyBtn" class="icon">🔔</button>
+  </header>
+
+  <section class="card" id="nextCard">
+    <div class="row">
+      <h2>Next class</h2>
+      <button id="startTimerBtn" class="pill">Start timer</button>
+    </div>
+    <div id="nextInfo" class="mono"></div>
+    <div id="countdown" class="countdown"></div>
+  </section>
+
+  <main class="card chat">
+    <div id="messages"></div>
+    <form id="composer">
+      <input id="text" placeholder="Ask: next class, class after 2 days, on 17/09, faculty for AIB-1G, time for GAIBA-G..." autocomplete="off"/>
+      <div class="actions">
+        <input id="file" type="file" accept="image/*" multiple style="display:none"/>
+        <button type="button" id="uploadBtn" class="icon">📎</button>
+        <button type="submit" class="pill">Send</button>
+      </div>
+    </form>
+  </main>
+  <footer class="safearea"></footer>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{
+  "name": "FORE-Bot",
+  "short_name": "FOREBot",
+  "start_url": "index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fff7ed",
+  "theme_color": "#fb923c",
+  "icons": [
+    {
+      "src": "assets/icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icon-bat.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icon-spidey.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+
+:root { --bg:#fff7ed; --card:#ffffff; --line:#fed7aa; --ink:#1f2937; --brand:#fb923c; }
+body.spidey { --bg:#ffebee; --card:#ffffff; --line:#ffcdd2; --ink:#b71c1c; --brand:#d32f2f; }
+body.bat { --bg:#121212; --card:#1e1e1e; --line:#333; --ink:#f5f5f5; --brand:#ffeb3b; }
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,Segoe UI,Roboto}
+.topbar{position:sticky;top:0;display:flex;gap:12px;align-items:center;padding:12px;border-bottom:1px solid var(--line);backdrop-filter:saturate(1.2) blur(6px);background:#fff1}
+.logo{width:40px;height:40px;border-radius:50%;background-size:cover;background-position:center}
+.titles h1{margin:0;font-size:18px;font-weight:800}
+.titles small{opacity:.7}
+.icon{border:none;background:#fff;padding:10px;border-radius:12px;box-shadow:0 1px 2px #0001}
+.card{margin:14px auto;max-width:640px;background:var(--card);border-radius:18px;padding:14px;box-shadow:0 3px 16px #0001}
+.row{display:flex;justify-content:space-between;align-items:center}
+.pill{border:none;background:var(--brand);color:var(--ink);padding:10px 14px;border-radius:999px;font-weight:700}
+.countdown{font-size:28px;font-weight:800;margin-top:6px}
+.mono{font-family: ui-monospace, SFMono-Regular, Menlo, monospace}
+.chat #messages{display:flex;flex-direction:column;gap:10px;max-height:60vh;overflow:auto;padding-bottom:8px}
+.bubble{max-width:75%;padding:10px 12px;border-radius:16px;font-size:14px}
+.bubble.you{align-self:flex-end;background:var(--brand);color:var(--ink);border-bottom-right-radius:4px}
+.bubble.me{align-self:flex-start;background:var(--card);border-bottom-left-radius:4px}
+#composer{display:flex;gap:8px;align-items:center;padding-top:10px}
+#composer input#text{flex:1;background:white;border:1px solid var(--line);border-radius:12px;padding:12px}
+.actions{display:flex;gap:8px;align-items:center}
+.safearea{height:env(safe-area-inset-bottom)}
