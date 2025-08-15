@@ -11,7 +11,7 @@ const DATA = {
     "SDRM-2G": "Prof. Pranesh Nagarajan"
   },
   events: [
-    // Example events — add more for your actual timetable
+    // Example entries – fill in the rest from your timetable
     { date: "2025-08-18", start: "08:30", end: "09:45", section: "ABM-1G", room: "CR-4" },
     { date: "2025-08-19", start: "12:50", end: "14:05", section: "GAIBA-G", room: "CR-5" },
     { date: "2025-08-20", start: "10:00", end: "11:15", section: "SDRM-2G", room: "CR-4" }
@@ -119,11 +119,11 @@ document.getElementById('composer').addEventListener('submit', (e) => {
     dateMatch = d.toISOString().slice(0, 10);
   } else if (/today/i.test(q)) {
     dateMatch = now.toISOString().slice(0, 10);
-  } else if (/\\b\\d{1,2}\\/\\d{1,2}\\b/.test(q)) {
-    const [day, month] = q.match(/\\d+/g).map(Number);
+  } else if (/\b\d{1,2}\/\d{1,2}\b/.test(q)) {
+    const [day, month] = q.match(/\d+/g).map(Number);
     dateMatch = `${now.getFullYear()}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-  } else if (/\\d{4}-\\d{2}-\\d{2}/.test(q)) {
-    dateMatch = q.match(/\\d{4}-\\d{2}-\\d{2}/)[0];
+  } else if (/\d{4}-\d{2}-\d{2}/.test(q)) {
+    dateMatch = q.match(/\d{4}-\d{2}-\d{2}/)[0];
   }
 
   if (dateMatch) {
@@ -143,7 +143,7 @@ document.getElementById('composer').addEventListener('submit', (e) => {
       const sec = DATA.sections.find(s => q.toUpperCase().includes(s));
       say(`${sec}: ${DATA.faculty[sec]}`);
     } else {
-      say(Object.entries(DATA.faculty).map(([k, v]) => `${k}: ${v}`).join('\\n'));
+      say(Object.entries(DATA.faculty).map(([k, v]) => `${k}: ${v}`).join('\n'));
     }
     return;
   }
