@@ -45,3 +45,15 @@ body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-ap
 #composer input#text{flex:1;background:white;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
 .actions{display:flex;gap:8px;align-items:center}
 .safearea{height:env(safe-area-inset-bottom)}
+/* attendance badge */
+.badge{
+  display:inline-block;
+  padding:2px 8px;
+  border-radius:999px;
+  background:var(--brand);
+  color:var(--pillText);
+  font-weight:800;
+  font-size:12px;
+  margin-left:6px;
+}
+
