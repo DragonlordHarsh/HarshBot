@@ -1,24 +1,47 @@
+:root{
+  --bg:#fff7ed; --card:#ffffff; --line:#fed7aa; --ink:#1f2937;
+  --pill-bg:#fb923c; --pill-ink:#111;     /* good contrast on orange */
+  --icon-bg:#ffffff; --icon-ink:#111;
+}
+body.spidey{
+  --bg:#ffebee; --card:#ffffff; --line:#ffcdd2; --ink:#b71c1c;
+  --pill-bg:#d32f2f; --pill-ink:#fff;     /* red with white text */
+  --icon-bg:#fff; --icon-ink:#b71c1c;
+}
+body.bat{
+  --bg:#0f0f0f; --card:#181818; --line:#2a2a2a; --ink:#f5f5f5;
+  --pill-bg:#ffeb3b; --pill-ink:#000;     /* yellow with black text */
+  --icon-bg:#222; --icon-ink:#ffeb3b;
+}
 
-:root { --bg:#fff7ed; --card:#ffffff; --line:#fed7aa; --ink:#1f2937; --brand:#fb923c; }
-body.spidey { --bg:#ffebee; --card:#ffffff; --line:#ffcdd2; --ink:#b71c1c; --brand:#d32f2f; }
-body.bat { --bg:#121212; --card:#1e1e1e; --line:#333; --ink:#f5f5f5; --brand:#ffeb3b; }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,Segoe UI,Roboto}
-.topbar{position:sticky;top:0;display:flex;gap:12px;align-items:center;padding:12px;border-bottom:1px solid var(--line);backdrop-filter:saturate(1.2) blur(6px);background:#fff1}
-.logo{width:40px;height:40px;border-radius:50%;background-size:cover;background-position:center}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto}
+.topbar{position:sticky;top:0;z-index:5;display:flex;gap:10px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line);background:color-mix(in oklab, var(--bg) 85%, #000 0%);backdrop-filter:saturate(1.2) blur(6px)}
+.logo{width:40px;height:40px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #fde68a 0 40%, #fb923c 60% 100%);box-shadow:inset 0 0 0 2px #fff3,0 1px 4px #0003}
 .titles h1{margin:0;font-size:18px;font-weight:800}
-.titles small{opacity:.7}
-.icon{border:none;background:#fff;padding:10px;border-radius:12px;box-shadow:0 1px 2px #0001}
-.card{margin:14px auto;max-width:640px;background:var(--card);border-radius:18px;padding:14px;box-shadow:0 3px 16px #0001}
+.titles small{opacity:.75}
+
+.icon, .pill{border:none;border-radius:12px;padding:10px 14px;font-weight:700}
+.icon{background:var(--icon-bg);color:var(--icon-ink);box-shadow:0 1px 2px #0004}
+.pill{background:var(--pill-bg);color:var(--pill-ink);box-shadow:0 2px 6px #0004}
+.pill:focus-visible, .icon:focus-visible{outline:2px solid color-mix(in oklab, var(--pill-bg), #000 20%);outline-offset:2px;border-radius:14px}
+
+.card{margin:14px auto;max-width:740px;background:var(--card);border-radius:18px;padding:16px;box-shadow:0 3px 18px #0003}
 .row{display:flex;justify-content:space-between;align-items:center}
-.pill{border:none;background:var(--brand);color:var(--ink);padding:10px 14px;border-radius:999px;font-weight:700}
+
 .countdown{font-size:28px;font-weight:800;margin-top:6px}
-.mono{font-family: ui-monospace, SFMono-Regular, Menlo, monospace}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+
 .chat #messages{display:flex;flex-direction:column;gap:10px;max-height:60vh;overflow:auto;padding-bottom:8px}
-.bubble{max-width:75%;padding:10px 12px;border-radius:16px;font-size:14px}
-.bubble.you{align-self:flex-end;background:var(--brand);color:var(--ink);border-bottom-right-radius:4px}
-.bubble.me{align-self:flex-start;background:var(--card);border-bottom-left-radius:4px}
+.bubble{max-width:85%;padding:12px 14px;border-radius:16px;font-size:15px;white-space:pre-wrap}
+.bubble.you{align-self:flex-end;background:var(--pill-bg);color:var(--pill-ink);border-bottom-right-radius:4px}
+.bubble.me{align-self:flex-start;background:color-mix(in oklab, var(--bg) 60%, #fff 40%);border-bottom-left-radius:4px}
+
+.quick{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.quick .pill{padding:8px 12px;font-weight:800}
+
 #composer{display:flex;gap:8px;align-items:center;padding-top:10px}
-#composer input#text{flex:1;background:white;border:1px solid var(--line);border-radius:12px;padding:12px}
+#composer input#text{flex:1;background:white;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
 .actions{display:flex;gap:8px;align-items:center}
 .safearea{height:env(safe-area-inset-bottom)}
