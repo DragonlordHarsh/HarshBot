@@ -105,6 +105,55 @@ function calcGaps(evs){
   }
   return gaps;
 }
+// --- Reminder settings (local) ---
+const REMIND_OFFSETS_MIN = [15, 5];   // minutes before class
+let reminderTimers = [];               // store setTimeout IDs
+
+function clearReminders() {
+  reminderTimers.forEach(id => clearTimeout(id));
+  reminderTimers = [];
+}
+
+function eventsWithinNext(hours = 24) {
+  const now = new Date();
+  const future = new Date(now.getTime() + hours * 3600_000);
+  return DATA.events
+    .map(e => ({ ...e, startDate: toLocal(e.date, e.start) }))
+    .filter(e => e.startDate > now && e.startDate <= future)
+    .sort((a, b) => a.startDate - b.startDate);
+}
+
+async function ensurePermission() {
+  if (!('Notification' in window)) { alert('Notifications not supported.'); return false; }
+  let perm = Notification.permission;
+  if (perm !== 'granted') perm = await Notification.requestPermission();
+  return perm === 'granted';
+}
+
+async function scheduleRemindersForNext24h() {
+  if (!(await ensurePermission())) return;
+  clearReminders();
+  const upcoming = eventsWithinNext(24);
+  upcoming.forEach(ev => {
+    const start = toLocal(ev.date, ev.start).getTime();
+    REMIND_OFFSETS_MIN.forEach(mins => {
+      const t = start - mins * 60_000;
+      const delay = t - Date.now();
+      if (delay > 1000) {
+        const id = setTimeout(() => {
+          new Notification('Class reminder', {
+            body: `${ev.section} with ${DATA.faculty[ev.section]} at ${ev.start} • ${ev.room} in ${mins} min, ${MASTER}.`
+          });
+        }, delay);
+        reminderTimers.push(id);
+      }
+    });
+  });
+}
+
+// Reschedule on app load and every hour (catches the new day)
+window.addEventListener('load', () => scheduleRemindersForNext24h());
+setInterval(() => scheduleRemindersForNext24h(), 60 * 60 * 1000);
 
 // ---------- top card + countdown ----------
 let target = nextEvent();
@@ -134,10 +183,11 @@ el('#startTimerBtn').addEventListener('click', ()=> startCountdown());
 renderNextCard();
 
 // ---------- notifications + theme ----------
-el('#notifyBtn').addEventListener('click', async ()=>{
-  if(!('Notification' in window)) { alert('Notifications not supported.'); return; }
-  let perm=Notification.permission; if(perm!=='granted') perm=await Notification.requestPermission();
-  if(perm==='granted') new Notification('FORE-Bot',{ body:`Howdy, ${MASTER}! Notifications are ready.`});
+el('#notifyBtn').addEventListener('click', async () => {
+  const ok = await ensurePermission();
+  if (!ok) return;
+  await scheduleRemindersForNext24h();
+  sayHTML(`🔔 I’ll remind you <b>15 min</b> (and <b>5 min</b>) before each class in the next 24h, <b>${MASTER}</b>. Keep the app open in the background for local alerts.`);
 });
 
 // auto theme: odd day = spidey, even = bat
@@ -207,9 +257,11 @@ document.getElementById('composer').addEventListener('submit',(e)=>{
     sayHTML(`📅 <b>${fmtDate(d)}</b><br><b>${n.section}</b> with <i>${DATA.faculty[n.section]}</i><br>⏳ ${n.start}–${n.end} &nbsp; 🏫 ${n.room}<br><small>Starts in <b>${mins} min</b>.</small>`);
     renderNextCard(n); // refresh top card to this
     showChips([
-      {label:'Yes, start timer', onClick:()=>{ startCountdown(n); sayHTML('⏱️ Timer started.'); }},
-      {label:'No, thanks',       onClick:()=>{ sayHTML('Okay, I’ll be here if you need me, <b>'+MASTER+'</b>.'); }}
-    ]);
+  {label:'Yes, start timer', onClick:()=>{ startCountdown(n); sayHTML('⏱️ Timer started.'); }},
+  {label:'Remind me (15m/5m)', onClick:()=>{ scheduleRemindersForNext24h(); sayHTML('🔔 Reminder set for your upcoming classes.'); }},
+  {label:'No, thanks', onClick:()=>{ sayHTML('Okay, I’ll be here if you need me, <b>'+MASTER+'</b>.'); }}
+]);
+
     return;
   }
 
