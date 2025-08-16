@@ -103,6 +103,58 @@ function calcGaps(evs){
     const start=toLocal(evs[i+1].date,evs[i+1].start);
     gaps.push(minutesDiff(end,start));
   }
+  // ---------------- Persona Engine ----------------
+const PERSONAS = {
+  spidey: {
+    key: 'spidey', icon: '🕷️',
+    greet: (name)=> `🕷️ Hey there, <b>${name}</b>! Your friendly neighbourhood scheduler reporting in.`,
+    nextPrefix: ()=> '🕷️ Heads-up:',
+    noNext: (name)=> `🕷️ No next class on my radar, <b>${name}</b>.`,
+    timerOn: ()=> `🕷️ Timer’s webbed up and ticking.`,
+    remindOn: (name)=> `🕷️ I’ll nudge you 15m/5m before, <b>${name}</b>.`,
+    ack: (name)=> `🕷️ Got your back, <b>${name}</b>!`,
+    modeOn: ()=> `🕷️ Spidey mode engaged.`
+  },
+  bat: {
+    key: 'bat', icon: '🦇',
+    greet: (name)=> `🦇 ${name}. Systems online.`,
+    nextPrefix: ()=> '🦇 Intel:',
+    noNext: (name)=> `🦇 No incoming class, ${name}.`,
+    timerOn: ()=> `🦇 Countdown started.`,
+    remindOn: (name)=> `🦇 Alerts armed: T-15 & T-5.`,
+    ack: (name)=> `🦇 Acknowledged.`,
+    modeOn: ()=> `🦇 Bat mode active.`
+  },
+  minutes: {
+    key: 'minutes', icon: '⏱️',
+    greet: (name)=> `⏱️ Howdy, <b>${name}</b>! Miss Minutes here to keep ya on time!`,
+    nextPrefix: ()=> '⏱️ Next up:',
+    noNext: (name)=> `⏱️ No classes coming right up, <b>${name}</b>.`,
+    timerOn: ()=> `⏱️ Timer’s tickin’, sugar!`,
+    remindOn: (name)=> `⏱️ I’ll tap ya 15 and 5 minutes before.`,
+    ack: (name)=> `⏱️ You got it!`,
+    modeOn: ()=> `⏱️ Miss Minutes mode, hunnay!`
+  }
+};
+
+// current persona — inferred from body class
+function currentPersona() {
+  if (document.body.classList.contains('bat')) return PERSONAS.bat;
+  if (document.body.classList.contains('spidey')) return PERSONAS.spidey;
+  return PERSONAS.minutes; // default / weekends
+}
+
+// wrap a block of HTML with persona prefix when needed
+function sayPersonaNext(html) {
+  const P = currentPersona();
+  sayHTML(`${P.nextPrefix()}<br>${html}`);
+}
+
+function personaAck(textIfAny) {
+  const P = currentPersona();
+  sayHTML(textIfAny ? textIfAny : P.ack(MASTER));
+}
+
   return gaps;
 }
 // --- Reminder settings (local) ---
@@ -190,16 +242,32 @@ el('#notifyBtn').addEventListener('click', async () => {
   sayHTML(`🔔 I’ll remind you <b>15 min</b> (and <b>5 min</b>) before each class in the next 24h, <b>${MASTER}</b>. Keep the app open in the background for local alerts.`);
 });
 
-// auto theme: odd day = spidey, even = bat
+// auto theme: Weekend=Miss Minutes, weekdays alternate Spidey/Bat
 (function autoTheme(){
-  const day = new Date().getDate();
-  document.body.classList.remove('bat','spidey');
-  if(day%2===0) document.body.classList.add('bat'); else document.body.classList.add('spidey');
+  const d = new Date();
+  const isWeekend = [0,6].includes(d.getDay()); // Sun=0, Sat=6
+  document.body.classList.remove('bat','spidey','minutes');
+  if (isWeekend) {
+    document.body.classList.add('minutes');
+  } else {
+    // alternate Spidey/Bat by date
+    if (d.getDate() % 2 === 0) document.body.classList.add('bat');
+    else document.body.classList.add('spidey');
+  }
 })();
+
+// theme switch button (cycles Spidey → Bat → Minutes)
 el('#themeBtn').addEventListener('click', ()=>{
-  document.body.classList.toggle('bat');
-  document.body.classList.toggle('spidey');
+  const order = ['spidey','bat','minutes'];
+  const cur = currentPersona().key;
+  const idx = order.indexOf(cur);
+  const next = order[(idx+1)%order.length];
+  document.body.classList.remove('spidey','bat','minutes');
+  document.body.classList.add(next);
+  sayHTML(currentPersona().modeOn());
 });
+
+
 
 // ---------- greeting ----------
 sayHTML(`Welcome back, <b>${MASTER}</b>. I’m ready — ask for <i>next class</i>, a <i>date</i>, <i>faculty</i>, or <i>start timer</i>.`);
