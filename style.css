@@ -56,4 +56,13 @@ body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-ap
   font-size:12px;
   margin-left:6px;
 }
+/* Miss Minutes theme (TVA orange) */
+body.minutes {
+  --bg:#fff7ed;      /* warm sand */
+  --card:#ffffff;
+  --line:#fed7aa;
+  --ink:#4a3428;     /* cocoa text */
+  --brand:#fb923c;   /* orange */
+  --pillText:#000000;
+}
 
